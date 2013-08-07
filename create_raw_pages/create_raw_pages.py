@@ -29,7 +29,7 @@ def run():
             try:
                 f = open(fp)
             except IOError:
-                pass
+                wikibot.util.log('Could not open file.')
             except Exception:
                 return
             else:
