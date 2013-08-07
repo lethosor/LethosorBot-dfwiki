@@ -1,0 +1,7 @@
+toad	DF2012:creature_amphibians.txt	creature	CREATURE	TOAD
+worm	DF2012:creature_annelids.txt	creature	CREATURE	WORM
+blue jay	DF2012:creature_birds.txt	creature	CREATURE	BIRD_BLUEJAY
+cardinal	DF2012:creature_birds.txt	creature	CREATURE	BIRD_CARDINAL
+penguin man	DF2012:creature_birds.txt	creature	CREATURE	PENGUIN MAN	DF2012:c_variation_default.txt
+giant penguin	DF2012:creature_birds.txt	creature	CREATURE	BIRD_PENGUIN_GIANT	DF2012:c_variation_default.txt
+peregrine falcon man	DF2012:creature_birds.txt	creature	CREATURE	PEREGRINE FALCON MAN	DF2012:c_variation_default.txt
