@@ -12,7 +12,14 @@ File format: (These values on one line, tab-separated)
 
 import wikibot
 
+class CreateRawTask(wikibot.bot.Task):
+    pass
+
+class CreateRawJob(wikibot.bot.Job):
+    pass
+
 def run():
+    """ Runs the script """
     user = wikibot.cred.get_user();
     args = wikibot.command_line.parse_args();
     # Obtain a file
