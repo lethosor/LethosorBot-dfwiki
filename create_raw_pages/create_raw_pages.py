@@ -7,7 +7,11 @@ File format: (These values on one line, tab-separated)
 * Category type (creature, inorganic, etc.)
 * Object type (CREATURE, INORGANIC, etc.)
 * Object ID (e.g. BIRD_BLUEJAY)
-* Creature variation files (optional, pipe-separated) 
+* Creature variation files (optional, pipe-separated)
+
+Required command-line arguments (will be prompted if left blank):
+* file: Path to file (described above)
+* namespace: Namespace to create pages in
 """
 
 import wikibot
@@ -27,10 +31,25 @@ templates = {
 }
 
 class CreateRawTask(wikibot.bot.Task):
-    pass
+    def __init__(self, user, page_list, text, summary='Creating raw page ({0}/{1})', data=None):
+        if data is None:
+            data = {}
+        super(CreateRawTask, self).__init__(user, CreateRawJob, data)
+        self.text, self.summary = text, summary
+        self.page_names = page_list
 
 class CreateRawJob(wikibot.bot.Job):
-    pass
+    def run(self):
+        if self.page.text != "":
+            return False
+        self.page.text = self.format(self.task.text)
+        return True
+    
+    def save(self):
+        self.page.save(
+            summary=self.task.summary.format(*self.count),
+            bot=1
+        )
 
 def run():
     """ Runs the script """
@@ -54,6 +73,10 @@ def run():
         except Exception as e:
             util.log(e)
             return
+    if not 'namespace' in args:
+        namespace = wikibot.util.input('Namespace (blank for main): ')
+    else:
+        namespace = args['namespace']
     contents = f.read();
     f.close()
     contents = contents.replace('\r', '')
@@ -66,11 +89,14 @@ def run():
     pages = []
     data = {}
     for d in array:
-        pages.append(d[0])
+        page_name = namespace + ':' + d[0] + '/raw'
+        pages.append(page_name)
         template = templates['var'] if len(d) > 5 else templates['std']
-        data[d[0]] = {}
-        data[d[0]]['text'] = wikibot.util.str_format(template, data=d)
+        data[page_name] = {}
+        data[page_name]['text'] = wikibot.util.str_format(template, data=d)
     
+    task = CreateRawTask(user, pages, '{% data[text] %}', data=data)
+    task.run_all()
 
 if __name__ == '__main__':
     run()
