@@ -12,3 +12,23 @@ File format: (These values on one line, tab-separated)
 
 import wikibot
 
+def run():
+    user = wikibot.cred.get_user();
+    args = wikibot.command_line.parse_args();
+    # Obtain a file
+    if not 'file' in args:
+        while 1:
+            fp = wikibot.util.input('File path: ')
+            try:
+                f = open(fp)
+            except IOError:
+                pass
+            except Exception:
+                return
+            else:
+                break
+        contents = f.read();
+        f.close()
+
+if __name__ == '__main__':
+    run()
