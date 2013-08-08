@@ -12,6 +12,8 @@ File format: (These values on one line, tab-separated)
 Required command-line arguments (will be prompted if left blank):
 * file: Path to file (described above)
 * namespace: Namespace to create pages in
+Optional (will not be prompted):
+* overwrite: If present, overwrites existing pages
 """
 
 import wikibot
