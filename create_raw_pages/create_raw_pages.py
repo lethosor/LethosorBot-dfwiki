@@ -31,16 +31,17 @@ templates = {
 }
 
 class CreateRawTask(wikibot.bot.Task):
-    def __init__(self, user, page_list, text, summary='Creating raw page ({0}/{1})', data=None):
+    def __init__(self, user, page_list, text, summary='Creating raw page ({0}/{1})',
+                 data=None, overwrite=False):
         if data is None:
             data = {}
         super(CreateRawTask, self).__init__(user, CreateRawJob, data)
-        self.text, self.summary = text, summary
+        self.text, self.summary, self.overwrite = text, summary, overwrite
         self.page_names = page_list
 
 class CreateRawJob(wikibot.bot.Job):
     def run(self):
-        if self.page.text != "":
+        if self.page.text != "" and not self.task.overwrite:
             return False
         self.page.text = self.format(self.task.text)
         return True
@@ -77,6 +78,7 @@ def run():
         namespace = wikibot.util.input('Namespace (blank for main): ')
     else:
         namespace = args['namespace']
+    overwrite = 'overwrite' in args
     contents = f.read();
     f.close()
     contents = contents.replace('\r', '')
@@ -95,7 +97,7 @@ def run():
         data[page_name] = {}
         data[page_name]['text'] = wikibot.util.str_format(template, data=d)
     
-    task = CreateRawTask(user, pages, '{% data[text] %}', data=data)
+    task = CreateRawTask(user, pages, '{% data[text] %}', data=data, overwrite=overwrite)
     task.run_all()
 
 if __name__ == '__main__':
