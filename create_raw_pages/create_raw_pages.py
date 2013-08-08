@@ -59,23 +59,13 @@ def run():
     user = wikibot.cred.get_user();
     args = wikibot.command_line.parse_args();
     # Obtain a file
-    if not 'file' in args:
-        while 1:
-            fp = wikibot.util.input('File path: ')
-            try:
-                f = open(fp)
-            except IOError:
-                wikibot.util.log('Could not open file.')
-            except Exception:
-                return
-            else:
-                break
-    else:
-        try:
-            f = open(args['file'])
-        except Exception as e:
-            util.log(e)
-            return
+    fp = wikibot.util.get_file(exists=True,
+                               path=args['file'] if 'file' in args else '')
+    try:
+        f = open(fp)
+    except Exception as e:
+        util.log(e)
+        return
     if not 'namespace' in args:
         namespace = wikibot.util.input('Namespace (blank for main): ')
     else:
