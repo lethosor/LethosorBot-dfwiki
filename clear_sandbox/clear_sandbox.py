@@ -15,7 +15,7 @@ def run():
     
     last_line = args['last-line'] if 'last-line' in args else wikibot.util.input('Last line: ')
     sandbox = args['sandbox'] if 'sandbox' in args else 'Project:Sandbox'
-    silent = 'silent' in args
+    silent = 'no-prompt' in args
     
     page = user.get_page(sandbox)
     lines = page.text.splitlines()
