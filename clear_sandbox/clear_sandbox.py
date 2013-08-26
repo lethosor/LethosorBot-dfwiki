@@ -26,7 +26,7 @@ def run():
             break
     
     if not silent:
-        print text
+        print(text)
         wikibot.util.input('\nEnter to save, Ctrl-C to abort: ')
     page.text = text
     page.save('Emptying sandbox', bot=1)
@@ -36,4 +36,4 @@ if __name__ == '__main__':
     try:
         run()
     except KeyboardInterrupt:
-        print 'Aborted'
+        print('Aborted')
