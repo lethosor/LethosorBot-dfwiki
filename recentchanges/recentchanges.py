@@ -1,26 +1,19 @@
 """
-Check recent changes periodically
+Recent changes tracker
 """
 
-import os, sys, time
+import sys, time
 import wikibot
-user = wikibot.command_line.get_user()
-if not user:
-    print('no user')
-    sys.exit()
-os.system('clear')
-def log(text, color='black'):
-    wikibot.util.logf('<{0}>{1: <50}\r'.format(color, text))
-
+import wikibot.util as util
 try:
-    while 1:
-        if len(user.api_request({'list':'recentchanges', 'rcprop':'user', 'rclimit':1, 'rcshow': '!patrolled'}, auto_filter=0)['query']['recentchanges']):
-            log('New changes!', 'green')
-        else:
-            log('No new changes.', 'red')
-        time.sleep(60)
-        log('Checking...')
-except Exception as e:
-    wikibot.util.log('\n<bold,red>Error:<red> ' + str(e))
-except:
-    wikibot.util.log('')
+    user = wikibot.cred.get_user()
+except wikibot.user.UserError as e:
+    wikibot.util.die('Could not log in:', e)
+
+timestamp = user.api_request({'list':'recentchanges', 'rclimit':1}, query_continue=False)['query-continue']['recentchanges']['rccontinue'].split('|')[0]
+print(timestamp)
+while 1:
+    util.logf('\rfetching')
+    rc = user.api_request({'list':'recentchanges', 'rclimit': 500, 'rcstart': timestamp})
+    print(rc)
+    time.sleep(2)
