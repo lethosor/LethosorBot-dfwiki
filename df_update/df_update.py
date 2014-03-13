@@ -12,6 +12,7 @@ version_pattern = re.compile(r'download\s+dwarf\s+fortress\s+([0-9\.]+)\s+\(([^)
 while 1:
     try:
         if not args.dry_run:
+            util.log('Retrieving version information (Bay12)')
             req = wikibot.network.Request('http://www.bay12games.com/dwarves/')
             version, date = version_pattern.search(req.response_text).groups()
         else:
@@ -20,7 +21,7 @@ while 1:
         util.log('Unable to retrieve version: %s' % e, type='warn')
         time.sleep(300)
         continue
-    util.log('Retrieving current version...')
+    util.log('Retrieving current version (on wiki)')
     version_page = user.get_page('Template:Current/version')
     version_text = version_page.text.split('<')[0]
     date_page = user.get_page('Template:Current/lastupdate')
