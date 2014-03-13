@@ -18,7 +18,7 @@ while 1:
             version, date = '0.34.11', 'June 4, 2012'
     except Exception as e:
         util.log('Unable to retrieve version: %s' % e, type='warn')
-        time.sleep(60)
+        time.sleep(300)
         continue
     util.log('Retrieving current version...')
     version_page = user.get_page('Template:Current/version')
