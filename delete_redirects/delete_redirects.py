@@ -22,13 +22,12 @@ while True:
         'aplimit': 250,
         'apfrom': start_title,
     }, auto_filter=False)
-    redirects = [p['title'] for p in query['query']['allpages']]
+    redirects = [p['title'] for p in query['query']['allpages']
+                 if p['title'] not in checked_titles]
     if not len(redirects):
         util.log('Done.', type='success')
         break
     for title in redirects:
-        if title in checked_titles:
-            continue
         checked_titles.append(title)
         util.logf('Fetching "%s"... ' % title)
         p = user.get_page(title)
