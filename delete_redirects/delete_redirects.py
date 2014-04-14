@@ -7,21 +7,29 @@ import re
 
 import wikibot
 util = wikibot.util
+wikibot.command_line.parser.add_argument('--start', help='Title to start from',
+        required=False, default='')
+args = wikibot.command_line.parse_args()
 user = wikibot.cred.get_user()
 
+start_title = args.start
+checked_titles = []
 while True:
     query = user.api_request({
         'list': 'allpages',
         'apnamespace': 0,
         'apfilterredir': 'redirects',  # Only redirects
         'aplimit': 250,
+        'apfrom': start_title,
     }, auto_filter=False)
     redirects = [p['title'] for p in query['query']['allpages']]
     if not len(redirects):
         util.log('Done.', type='success')
         break
-    print(redirects)
     for title in redirects:
+        if title in checked_titles:
+            continue
+        checked_titles.append(title)
         util.logf('Fetching "%s"... ' % title)
         p = user.get_page(title)
         redirect_title = re.search(r'\[\[([^\]]+)\]\]', p.text)
@@ -42,4 +50,5 @@ while True:
         else:
             #print('\n%s | %s' % (redirect_title, 'cv:'+title))
             util.logf('Redirects to "%s" instead.\n' % redirect_title, type='warn')
-    break
+    start_title = title
+    util.log('Fetching new list...')
