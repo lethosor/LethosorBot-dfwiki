@@ -13,6 +13,7 @@ args = wikibot.command_line.parse_args()
 user = wikibot.cred.get_user()
 
 start_title = args.start
+util.log('<bold>Starting at "%s"' % start_title)
 checked_titles = []
 while True:
     query = user.api_request({
