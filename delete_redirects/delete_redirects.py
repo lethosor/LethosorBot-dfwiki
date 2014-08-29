@@ -47,6 +47,16 @@ while True:
                 'token': user.edit_token,
             })
             util.logf('Done.\n', type='success')
+        elif redirect_title.lower().startswith('cv:'):
+            if '{{bad redirect}}' in p.text:
+                util.logf('Already tagged\n', type='info')
+            else:
+                p.text = '{{bad redirect}}\n' + p.text
+                p.save(
+                    bot=True,
+                    summary='Flagging redirect - see [[DF:REDIR]]',
+                )
+                util.logf('<red>Flagged\n')
         else:
             #print('\n%s | %s' % (redirect_title, 'cv:'+title))
             util.logf('Redirects to "%s" instead.\n' % redirect_title, type='warn')
