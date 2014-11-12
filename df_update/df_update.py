@@ -15,17 +15,17 @@ while 1:
             util.log('Retrieving version information (Bay12)')
             req = wikibot.network.Request('http://www.bay12games.com/dwarves/')
             version, date = version_pattern.search(req.response_text).groups()
+            util.log('Retrieving current version (on wiki)')
+            version_page = user.get_page('Template:Current/version')
+            version_text = version_page.text.split('<')[0]
+            date_page = user.get_page('Template:Current/lastupdate')
+            date_text = date_page.text.split('<')[0]
         else:
             version, date = '0.34.11', 'June 4, 2012'
     except Exception as e:
         util.log('Unable to retrieve version: %s' % e, type='warn')
         time.sleep(300)
         continue
-    util.log('Retrieving current version (on wiki)')
-    version_page = user.get_page('Template:Current/version')
-    version_text = version_page.text.split('<')[0]
-    date_page = user.get_page('Template:Current/lastupdate')
-    date_text = date_page.text.split('<')[0]
     summary = 'Updating to version %s (Released %s)' % (version, date)
     util.log('Current: %s: %s | Wiki: %s: %s' % (version, date, version_text, date_text))
     updated = False
