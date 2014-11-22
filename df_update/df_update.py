@@ -44,4 +44,4 @@ while 1:
     else:
         util.log('No change')
 
-    time.sleep(3600)
+    time.sleep(60*20)
