@@ -6,6 +6,7 @@ import datetime, re, time, traceback, wikibot
 util = wikibot.util
 
 wikibot.command_line.parser.add_argument('--dry-run', action='store_true', help='Dry run')
+wikibot.command_line.parser.add_argument('--interval', type=int, help='Update interval, in minutes', default=20)
 args = wikibot.command_line.parse_args()
 
 user = wikibot.cred.get_user()
@@ -114,4 +115,4 @@ while 1:
         print('-' * 80)
         traceback.print_exc()
         print('-' * 80)
-    time.sleep(60*20)
+    time.sleep(60 * args.interval)
