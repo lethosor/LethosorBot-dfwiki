@@ -1,0 +1,2 @@
+mwclient==0.10.1
+-e ./dfwikibot_util

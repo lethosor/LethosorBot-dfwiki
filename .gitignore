@@ -1,4 +1,5 @@
 credentials.py
+logs/
 
 *.py[cod]
 
