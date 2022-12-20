@@ -47,6 +47,7 @@ for page_index, df2014_page in enumerate(pages):
     do_log_content = False
     do_content_edit = False
     do_content_move = False
+    do_main_delete = False
 
     summary = 'Migrating v50 page (%i/%i)' % (page_index + 1, num_pages)
 
@@ -74,6 +75,7 @@ for page_index, df2014_page in enumerate(pages):
             # normal move
             log_msg['type'] = 'content'
             do_content_move = True
+            do_main_delete = True
         else:
             log_msg['type'] = 'unknown'
             print('BAD REDIRECT:', main_page.name, main_page.redirects_to().name)
@@ -109,5 +111,8 @@ for page_index, df2014_page in enumerate(pages):
             main_page.edit(main_text_new, summary=summary)
             df2014_page.edit(df2014_text_new, summary=summary)
         elif do_content_move:
+            if do_main_delete:
+                # necessary only sometimes, not sure why - otherwise we get an `articleexists` error
+                main_page.delete(reason=summary)
             df2014_page.move(main_page.name, reason=summary, move_talk=False)
             df2014_page.edit(df2014_text_old, summary=summary)
