@@ -48,7 +48,7 @@ for page_index, df2014_page in enumerate(pages):
     do_content_edit = False
     do_content_move = False
 
-    summary = 'Migrating v50 page (%i/%i)' % (page_index, num_pages)
+    summary = 'Migrating v50 page (%i/%i)' % (page_index + 1, num_pages)
 
     df2014_text_old = df2014_page.text()
     df2014_text_new = df2014_text_old
@@ -106,6 +106,8 @@ for page_index, df2014_page in enumerate(pages):
 
     if not args.dry_run:
         if do_content_edit:
-            pass # TODO
+            main_page.edit(main_text_new, summary=summary)
+            df2014_page.edit(df2014_text_new, summary=summary)
         elif do_content_move:
-            pass # TODO
+            df2014_page.move(main_page.name, reason=summary, move_talk=False)
+            df2014_page.edit(df2014_text_old, summary=summary)
